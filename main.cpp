@@ -1,21 +1,23 @@
 #include <iostream>
 #include <vector>
 #include <windows.h>
+#include <cmath>
 using namespace std;
 
-int numbers[4][2]{
-    {1, 2},
-    {4, 5},
-    {7, 8},
-    {3, 9}};
-
 vector<vector<int>> polygon = {
-    {1, 2},
-    {4, 5},
-    {7, 8},
-    {3, 9}};
+    {1, 1},
+    {3, 5},
+    {7, 5},
+    {4, 2}};
 
-void consoling()
+// vector<vector<int>> polygon = {
+//     {1, 1},
+//     {3, 10},
+//     {10, 10},
+//     {10, 3},
+//     {5, 5}};
+
+void consoling(vector<vector<int>> polygon)
 {
     cout << "Двухмерный вектор polygon:" << endl;
     for (const auto &row : polygon)
@@ -28,44 +30,51 @@ void consoling()
     }
 };
 
-void square() {}
+int square(vector<vector<int>> polygon)
+{
+    int s = 0; // Двойная площадь полигона
+    for (int i = 0; i < polygon.size(); i++)
+    {
+        if (i + 1 < polygon.size())
+            s = s + polygon[i][0] * polygon[i + 1][1];
+        else
+        {
+            s = s + polygon[i][0] * polygon[0][1];
+        }
+    }
+
+    for (int i = 0; i < polygon.size(); i++)
+    {
+        if (i + 1 < polygon.size())
+            s = s - polygon[i + 1][0] * polygon[i][1];
+        else
+        {
+            s = s - polygon[0][0] * polygon[i][1];
+        }
+    }
+    // std::cout << fabs(s) << std::endl;
+    return fabs(s);
+}
 
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
 
-    double S;
-    consoling();
+    double s;
+    string text = "Могоугольник выпуклый";
+    vector<vector<int>> haplominus;
+    // consoling(polygon);
+    s = square(polygon);
 
-    int index = 2;
-    if (index < polygon.size())
+    for (int i = 0; i < polygon.size(); i++) // Убирает переменную в векторе
     {
-        polygon.erase(polygon.begin() + index);
-    }
-
-    consoling();
-
-    //////////////////////////////////////////
-    return 0;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 2; j++)
+        haplominus = polygon;
+        haplominus.erase(haplominus.begin() + i);
+        if (square(haplominus) > s)
         {
-            std::cout << numbers[i][j] << "\t";
-            S = numbers[i][j];
-        }
-        std::cout << std::endl;
+            // std::cout << "Могоугольник выпуклый" << std::endl;
+            text = "Могоугольник вогнутый";
+        };
     }
-    std::cout << S << std::endl;
-
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 2; j++)
-        {
-            std::cout << numbers[i][j] << "\t";
-        }
-        std::cout << std::endl;
-    }
-
-    // S = numbers[1][1];
+    std::cout << text << std::endl;
 }
